@@ -1,0 +1,17 @@
+
+
+2022.04.27
+
+1. 회원 가입 기능 구현하기
+
+- 회원 정보를 저장할 User 엔티티 생성
+- 회원가입 View로 넘어오는 데이터를 받는 UserFormDto 생성
+- User 엔티티를 저장할 수 있는 UserRepository 생성
+- UserService에서 saveUser 메서드 생성 -> user 저장하기전에 유효성 검사(userId, userEmail, userNickName)
+- controller에서 회원가입에 관한 getMapping, postMapping 메서드 생성
+- Auditing을 이용해 엔티티별로 사용되는 공통 기능을 관리(등록자, 수정자, 등록시간, 수정시간)
+- 코드 작성후 테스트 코드를 통해 테스트 수행
+
+2. 로그인/ 로그아웃 구현하기
+- 작업 진행중
+

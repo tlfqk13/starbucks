@@ -32,6 +32,10 @@ public class SecurityConfing extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
                 .logoutSuccessUrl("/");
+
+        http.authorizeRequests()
+                .mvcMatchers("/","/users/**","/email/**").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Override

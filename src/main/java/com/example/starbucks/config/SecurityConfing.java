@@ -21,7 +21,7 @@ public class SecurityConfing extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
+    /*@Override
     protected void configure(HttpSecurity http) throws Exception{
         http.formLogin()
                 .loginPage("/users/login")
@@ -37,10 +37,9 @@ public class SecurityConfing extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/","/users/**","/email/**").permitAll()
                 .anyRequest().authenticated();
     }
-
+*/
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)throws Exception{
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+    protected void configure(HttpSecurity http)throws Exception{
     }
 
 }

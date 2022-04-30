@@ -1,7 +1,10 @@
 package com.example.starbucks.controller;
 
 import com.example.starbucks.dto.UserFormDto;
+import com.example.starbucks.dto.VerifyCodeFormDto;
 import com.example.starbucks.entity.User;
+import com.example.starbucks.entity.VerifyCode;
+import com.example.starbucks.service.EmailService;
 import com.example.starbucks.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +26,8 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final EmailService emailService;
+
     @GetMapping(value = "/new")
     public String userForm(Model model){
         model.addAttribute("userFormDto",new UserFormDto());
@@ -30,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/new")
-    public String newMember(@Valid UserFormDto userFormDto, BindingResult bindingResult,Model model){
+    public String newMember(UserFormDto userFormDto, BindingResult bindingResult,Model model){
 
         if(bindingResult.hasErrors()){
             return "user/userForm";
@@ -39,12 +44,35 @@ public class UserController {
         try{
             User user = User.createUser(userFormDto,passwordEncoder);
             userService.saveUser(user);
-        }catch (IllegalStateException e){
+            emailService.sendSimpleMessage(user.getEmail());
+
+        }catch (Exception e){
             model.addAttribute("errorMessage",e.getMessage());
             return "user/userForm";
         }
-        return "redirect:/";
+        return "redirect:confirm";
     }
+
+    @GetMapping(value="/confirm")
+    public String verifyCode(Model model, VerifyCodeFormDto verifyCodeFormDto){
+        model.addAttribute("verifyCodeFormDto",new VerifyCodeFormDto());
+        return "email/emailForm";
+    }
+
+    @PostMapping(value = "/confirm")
+    public String verifyCodeAction(Model model, @Valid VerifyCodeFormDto verifyCodeFormDto, BindingResult result){
+        if(result.hasErrors()){
+            return "email/emailForm";
+        }
+
+        VerifyCode verifyCode = new VerifyCode();
+        verifyCode.setVerifyCode(verifyCodeFormDto.getToken());
+        userService.saveVerifyCode(verifyCode);
+
+        return "redirect:/login";
+    }
+
+
 
     @GetMapping(value = "/login")
     public String loginUser(){

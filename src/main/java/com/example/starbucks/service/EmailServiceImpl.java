@@ -66,7 +66,6 @@ public class EmailServiceImpl implements EmailService {
                     break;
             }
         }
-
         return key.toString();
     }
 

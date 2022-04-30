@@ -1,7 +1,9 @@
 package com.example.starbucks.service;
 
 import com.example.starbucks.entity.User;
+import com.example.starbucks.entity.VerifyCode;
 import com.example.starbucks.repository.UserRepository;
+import com.example.starbucks.repository.VerifyCodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
+
+    private final VerifyCodeRepository verifyCodeRepository;
 
     public User saveUser(User user){
         validateDuplicateUser(user);
@@ -31,17 +35,22 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    @Override
+    public VerifyCode saveVerifyCode(VerifyCode verifyCode){
+        return verifyCodeRepository.save(verifyCode);
+    }
+
+   /* @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepository.findByUserId(userId);
 
         if(user == null){
             throw new UsernameNotFoundException(userId);
         }
+
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUserId())
                 .password(user.getPassword())
                 .roles(user.getRole().toString())
                 .build();
-    }
+    }*/
 }

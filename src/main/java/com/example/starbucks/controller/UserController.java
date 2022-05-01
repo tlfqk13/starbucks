@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping(value="/confirm")
-    public String verifyCode(Model model, VerifyCodeFormDto verifyCodeFormDto){
+    public String verifyCode(Model model){
         model.addAttribute("verifyCodeFormDto",new VerifyCodeFormDto());
         return "email/emailForm";
     }
@@ -64,15 +64,15 @@ public class UserController {
         if(result.hasErrors()){
             return "email/emailForm";
         }
+        String token = verifyCodeFormDto.getToken();
+        boolean isValid= userService.validateVerifyCode(token);
 
-        VerifyCode verifyCode = new VerifyCode();
-        verifyCode.setVerifyCode(verifyCodeFormDto.getToken());
-        userService.saveVerifyCode(verifyCode);
-
-        return "redirect:/login";
+        if(!isValid){
+            return "email/emailForm";
+        }else{
+            return "redirect:login";
+        }
     }
-
-
 
     @GetMapping(value = "/login")
     public String loginUser(){

@@ -24,9 +24,11 @@ public class VerifyCode extends BaseEntity {
     @Column(unique = true)
     private String verifyCode;
 
-    @OneToOne
+    /*@OneToOne
     @JoinColumn(name="user_id")
-    private User user;
+    private User user;*/
 
+    @Column(name="user_email")
+    private String userEmail;
 
 }

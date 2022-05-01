@@ -1,5 +1,6 @@
 package com.example.starbucks.service;
 
+import com.example.starbucks.entity.VerifyCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,12 +17,18 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     JavaMailSender emailSender;
 
+    private final UserService userService;
+
     public static final String ePw = createKey();
 
-    public MimeMessage createMessage(String to)throws Exception{
+    public EmailServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
+
+    public MimeMessage createMessage(String userEmail)throws Exception{
         MimeMessage message = emailSender.createMimeMessage();
 
-        message.addRecipients(Message.RecipientType.TO,to);
+        message.addRecipients(Message.RecipientType.TO,userEmail);
         message.setSubject("00회원가입 이메일 인증");
 
         String msgg="";
@@ -70,11 +77,17 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public String sendSimpleMessage(String to)throws Exception {
+    public String sendSimpleMessage(String userEmail)throws Exception {
         // TODO Auto-generated method stub
-        MimeMessage message = createMessage(to);
+        MimeMessage message = createMessage(userEmail);
         try{//예외처리
             emailSender.send(message);
+
+            VerifyCode verifyCode = new VerifyCode();
+            verifyCode.setVerifyCode(ePw);
+            verifyCode.setUserEmail(userEmail);
+            userService.saveVerifyCode(verifyCode);
+
         }catch(MailException es){
             es.printStackTrace();
             throw new IllegalArgumentException();

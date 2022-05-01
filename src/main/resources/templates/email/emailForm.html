@@ -4,14 +4,15 @@
       layout:decorate="~{layouts/layout1}">
 
 <div layout:fragment="content">
-    <form role="form" method="post" th:action= "@{users/confirm}"
+    <form role="form" method="post" action="/users/confirm"
           th:object="${verifyCodeFormDto}">
         <div class="form-group">
-            <label th:for="token">이메일주소</label>
+            <span class="label-input100">Enter code verification</span>
             <input type="text" th:field="*{token}" class="form-control"
-                   placeholder="이메일을 입력해주세요">
+                   placeholder="인증코드를 입력해주세요">
             <p th:if="${#fields.hasErrors('token')}"
                th:errors="*{token}" class="fieldError">Incorrect data</p>
+
         </div>
 
         <div style="text-align: center">

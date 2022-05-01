@@ -25,7 +25,7 @@
 </th:block>
 
 <div layout:fragment="content">
-    <form th:action="@{/users/new}" role="form" method="post"
+    <form action="/users/new" role="form" method="post"
           th:object="${userFormDto}">
 
         <div class="form-group">
@@ -86,7 +86,7 @@
 
         <div class="form-group">
             <label th:for="phoneNumber">전화번호</label>
-            <input type="phoneNumber" th:field="*{phoneNumber}" class="form-control"
+            <input type="text" th:field="*{phoneNumber}" class="form-control"
                    placeholder="전화번호를 입력해주세요">
             <p th:if="${#fields.hasErrors('phoneNumber')}"
                th:errors="*{phoneNumber}" class="fieldError">Incorrect data</p>

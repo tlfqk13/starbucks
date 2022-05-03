@@ -3,11 +3,15 @@ package com.example.starbucks.service;
 
 import com.example.starbucks.dto.ItemFormDto;
 import com.example.starbucks.dto.ItemImgDto;
+import com.example.starbucks.dto.ItemSearchDto;
+import com.example.starbucks.dto.MainItemDto;
 import com.example.starbucks.entity.Item;
 import com.example.starbucks.entity.ItemImg;
 import com.example.starbucks.repository.ItemImgRepository;
 import com.example.starbucks.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,6 +66,16 @@ public class ItemService {
         itemFormDto.setItemImgDtoList(itemImgDtoList);
 
         return itemFormDto;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
+        return itemRepository.getAdminItemPage(itemSearchDto,pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
+        return itemRepository.getMainItemPage(itemSearchDto,pageable);
     }
 }
 
